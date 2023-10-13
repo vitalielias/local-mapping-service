@@ -1,0 +1,54 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+name: Java CI
+
+on:
+  push:
+    branches: [main, development]
+  pull_request:
+    branches: [main, development]
+
+jobs:
+  build:
+    name: Build and generate coverage report with Gradle in JDK ${{ matrix.jdk }} on ${{ matrix.os }}
+    strategy:
+      matrix:
+#        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [ubuntu-latest, macos-latest]
+        jdk: [17]
+        python-version: [3.9]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+      - name: Set up OpenJDK
+        uses: actions/setup-java@v1
+        with:
+          java-version: ${{ matrix.jdk }}
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Get Python location
+        run: python -c "import os, sys; print(sys.executable)"
+      - name: Update pip
+        run: python3 -m pip install --upgrade pip
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Clean
+        run: ./gradlew clean
+#      - if: matrix.os == 'windows-latest'
+#        name: Test with Gradle on Windows
+#        run: ./gradlew build -DapplicationProperties="src\test\resources\test-config\application-test-windows.properties"
+      - if: matrix.os != 'windows-latest'
+        name: Test with Gradle on ${{ matrix.os }}
+        run: ./gradlew build -DapplicationProperties="src/test/resources/test-config/application-test.properties" -DpythonLocation=`which python3`
+      - name: Generate report
+        run: ./gradlew jacocoTestReport
+#      - name: Codecov
+#        uses: codecov/codecov-action@v1
+#        with:
+#          files: ./build/reports/jacoco/test/jacocoTestReport.xml

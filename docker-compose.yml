@@ -1,0 +1,22 @@
+version: '3'
+services:
+  mapping_service:
+    build: 
+      context: .
+      dockerfile: Dockerfile.mapping_service
+    ports:
+      - "8095:8095"
+    volumes:
+      - shared_volume:/mappingSchemas
+
+  initializer:
+    build:
+      context: .
+      dockerfile: Dockerfile.initializer
+    depends_on:
+      - mapping_service
+    volumes:
+      - shared_volume:/initializer_files
+
+volumes:
+  shared_volume:

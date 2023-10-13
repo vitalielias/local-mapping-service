@@ -1,0 +1,23 @@
+# Use the official OpenJDK 17 image as the base image
+FROM openjdk:17-jdk-slim
+
+# Copy all files from the project directory to the working directory in the container
+COPY . .
+
+# Update packages and install wget, unzip, python3, and python3-pip, and other dependencies
+RUN apt clean
+RUN apt-get update && \
+    apt-get install -y wget unzip python3 python3-pip zlib1g-dev libbz2-dev liblzma-dev curl
+
+# Install the python libraries
+RUN pip3 install pandas hyperspy Pillow
+
+# Make the Gradle script executable and build the application
+RUN chmod +x ./gradlew
+RUN ./gradlew build -x test
+
+# Expose the application port
+EXPOSE 8095
+
+# Command to run the application
+CMD ["java", "-jar", "build/libs/mapping-service-1.0.2-SNAPSHOT.jar"]

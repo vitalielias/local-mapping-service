@@ -1,0 +1,6 @@
+{
+  "mappingId": "test2",
+  "mappingType": "test2_SEMTomoAcqToJSON_1.0.0",
+  "title": "semtomo2Acq",
+  "description": "testDesc"
+}

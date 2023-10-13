@@ -1,0 +1,11 @@
+FROM alpine
+
+# Copy the initialization script into the container
+COPY init_script.sh /init_script.sh
+RUN chmod +x /init_script.sh
+
+# Install curl
+RUN apk --no-cache add curl
+
+# Command to run the initialization script
+CMD ["/init_script.sh"]
