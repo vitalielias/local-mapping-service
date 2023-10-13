@@ -1,9 +1,9 @@
 version: '3'
 services:
-  mapping_service:
+  mapping-service:
     build: 
       context: .
-      dockerfile: Dockerfile.mapping_service
+      dockerfile: Dockerfile.mapping-service
     ports:
       - "8095:8095"
     volumes:
@@ -14,9 +14,14 @@ services:
       context: .
       dockerfile: Dockerfile.initializer
     depends_on:
-      - mapping_service
+      - mapping-service
     volumes:
       - shared_volume:/initializer_files
+    links:
+      - mapping-service
+    environment:
+      - mapping-service_PORT_5432_TCP_ADDR=mapping-service
+
 
 volumes:
   shared_volume:
