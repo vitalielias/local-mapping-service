@@ -35,7 +35,7 @@ public class ShellRunnerUtil {
     /**
      * Time in seconds when the script should throw a timeout exception.
      */
-    public static final int TIMEOUT = 30;
+    public static final int TIMEOUT = 600;
 
     /**
      * Logger for this class.

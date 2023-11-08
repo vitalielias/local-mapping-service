@@ -1,6 +1,6 @@
 {
-  "mappingId": "test2",
-  "mappingType": "test2_SEMTomoAcqToJSON_1.0.0",
-  "title": "semtomo2Acq",
-  "description": "testDesc"
+  "mappingId": "SEMFIBtoJSON",
+  "mappingType": "SEMTomoAcqToJSON_1.0.0",
+  "title": "semtomoAcq2JSON",
+  "description": "Extracts metadata from a SEM/FIB Tomography Acquisition zip file and maps it to the appropriate schema to create a JSON metadata document. LU: 03.11.2023"
 }

@@ -7,7 +7,7 @@ services:
     ports:
       - "8095:8095"
     volumes:
-      - shared_volume:/mappingSchemas
+      - ./mappingSchemas:/mappingSchemas  # Mount the host directory into the container
 
   initializer:
     build:
@@ -16,12 +16,17 @@ services:
     depends_on:
       - mapping-service
     volumes:
-      - shared_volume:/initializer_files
-    links:
+      - ./mappingSchemas:/initializer_files  # Mount the host directory into the container
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    ports:
+      - "80:80"  # Expose the frontend on port 80 of the host
+    depends_on:
       - mapping-service
     environment:
-      - mapping-service_PORT_5432_TCP_ADDR=mapping-service
+      - MAPPING_SERVICE_URL=http://mapping-service:8095
 
-
-volumes:
-  shared_volume:
+# Remove the named volume definition since we're not using it anymore
